@@ -1,0 +1,16 @@
+AfroTitte
+---------
+
+Build Notes:
+------------
+
+required dependency: OpenNI
+
+	navigate to a folder where you want to add the OpenNI project
+
+	execute git clone http://github.com/OpenNI/OpenNI.git -b unstable
+
+	follow the instructions in the OpenNI README file, especially those concerning the C# wrapper
+
+	open the afrotitte solution file with monodevelop and verify that the generated OpenNI.net.dll correctly referenced by the project
+
