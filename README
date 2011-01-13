@@ -8,9 +8,12 @@ required dependency: OpenNI
 
 	navigate to a folder where you want to add the OpenNI project
 
-	execute git clone http://github.com/OpenNI/OpenNI.git -b unstable
+	execute	git clone http://github.com/OpenNI/OpenNI.git -b unstable
 
-	follow the instructions in the OpenNI README file, especially those concerning the C# wrapper
+	follow the instructions in the OpenNI README file, especially those concerning the C#/mono wrapper
 
-	open the afrotitte solution file with monodevelop and verify that the generated OpenNI.net.dll correctly referenced by the project
+	open the afrotitte solution file with monodevelop and verify that the generated OpenNI.net.dll is correctly referenced by the project
 
+	execute git clone http://github.com/PrimeSense/Sensor.git -b unstable
+
+	follow the instructions in the Sensor README file

@@ -57,7 +57,7 @@
     </Reference>
     <Reference Include="OpenNI.net, Version=1.0.0.25, Culture=neutral, PublicKeyToken=6b43d0c6cf74ee7f">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\usr\lib\mono\gac\OpenNI.net\1.0.0.25__6b43d0c6cf74ee7f\OpenNI.net.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\usr\lib\mono\2.0\OpenNI.net.dll</HintPath>
     </Reference>
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />

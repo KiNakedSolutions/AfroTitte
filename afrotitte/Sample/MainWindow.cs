@@ -13,30 +13,65 @@ namespace UserTracker.net
 {
 	public partial class MainWindow : Form
 	{
+		
+		private readonly string SAMPLE_XML_FILE = @"../../Sample/SamplesConfig.xml";
+
+		private Context context;
+		private DepthGenerator depth;
+        private UserGenerator userGenerator;
+        private SkeletonCapability skeletonCapbility;
+        private PoseDetectionCapability poseDetectionCapability;
+        private string calibPose;
+		private Thread readerThread;
+		private bool shouldRun;
+		private Bitmap bitmap;
+		private int[] histogram;
+
+        private Dictionary<uint, Dictionary<SkeletonJoint, SkeletonJointPosition>> joints;
+
+        private bool shouldDrawPixels = true;
+        private bool shouldDrawBackground = true;
+        private bool shouldPrintID = true;
+        private bool shouldPrintState = true;
+        private bool shouldDrawSkeleton = true;
+		
+		
 		public MainWindow()
 		{
 			InitializeComponent();
 
-			this.context = new Context(SAMPLE_XML_FILE);
+//			this.context = new Context(SAMPLE_XML_FILE);
+			
+			this.context = new Context();
+			
+			FileDialog nakedRecordDialog = new OpenFileDialog();
+			nakedRecordDialog.InitialDirectory = "../../../../recordings/";
+			nakedRecordDialog.FileName = "SkeletonRec.oni";
+			nakedRecordDialog.Filter = "Naked Recodings|*.oni";
+			nakedRecordDialog.ShowDialog();
+			
+			this.context.OpenFileRecording(nakedRecordDialog.FileName);
+			
+			
 			this.depth = context.FindExistingNode(NodeType.Depth) as DepthGenerator;
 			if (this.depth == null)
 			{
 				throw new Exception("Viewer must have a depth node!");
-			}
-
-            this.userGenerator = new UserGenerator(this.context);
-            this.skeletonCapbility = new SkeletonCapability(this.userGenerator);
-            this.poseDetectionCapability = new PoseDetectionCapability(this.userGenerator);
-            this.calibPose = this.skeletonCapbility.GetCalibrationPose();
-
-            this.userGenerator.NewUser += new UserGenerator.NewUserHandler(userGenerator_NewUser);
-            this.userGenerator.LostUser += new UserGenerator.LostUserHandler(userGenerator_LostUser);
-            this.poseDetectionCapability.PoseDetected += new PoseDetectionCapability.PoseDetectedHandler(poseDetectionCapability_PoseDetected);
-            this.skeletonCapbility.CalibrationEnd += new SkeletonCapability.CalibrationEndHandler(skeletonCapbility_CalibrationEnd);
-
-            this.skeletonCapbility.SetSkeletonProfile(SkeletonProfile.All);
-            this.joints = new Dictionary<uint,Dictionary<SkeletonJoint,SkeletonJointPosition>>();
-            this.userGenerator.StartGenerating();
+			}		
+			
+//            this.userGenerator = new UserGenerator(this.context);
+//            this.skeletonCapbility = new SkeletonCapability(this.userGenerator);
+//            this.poseDetectionCapability = new PoseDetectionCapability(this.userGenerator);
+//            this.calibPose = this.skeletonCapbility.GetCalibrationPose();
+//
+//            this.userGenerator.NewUser += new UserGenerator.NewUserHandler(userGenerator_NewUser);
+//            this.userGenerator.LostUser += new UserGenerator.LostUserHandler(userGenerator_LostUser);
+//            this.poseDetectionCapability.PoseDetected += new PoseDetectionCapability.PoseDetectedHandler(poseDetectionCapability_PoseDetected);
+//            this.skeletonCapbility.CalibrationEnd += new SkeletonCapability.CalibrationEndHandler(skeletonCapbility_CalibrationEnd);
+//
+//            this.skeletonCapbility.SetSkeletonProfile(SkeletonProfile.All);
+//            this.joints = new Dictionary<uint,Dictionary<SkeletonJoint,SkeletonJointPosition>>();
+//            this.userGenerator.StartGenerating();
 
 
 			this.histogram = new int[this.depth.GetDeviceMaxDepth()];
@@ -282,7 +317,7 @@ namespace UserTracker.net
                     if (this.shouldDrawPixels)
                     {
                         ushort* pDepth = (ushort*)this.depth.GetDepthMapPtr().ToPointer();
-                        ushort* pLabels = (ushort*)this.userGenerator.GetUserPixels(0).SceneMapPtr.ToPointer();
+                        ushort* pLabels = (ushort*) this.depth.GetDepthMapPtr().ToPointer();//(ushort*)this.userGenerator.GetUserPixels(0).SceneMapPtr.ToPointer();
 
                         // set pixels
                         for (int y = 0; y < depthMD.YRes; ++y)
@@ -312,59 +347,39 @@ namespace UserTracker.net
                     this.bitmap.UnlockBits(data);
 
                     Graphics g = Graphics.FromImage(this.bitmap);
-                    uint[] users = this.userGenerator.GetUsers();
-                    foreach (uint user in users)
-                    {
-                        if (this.shouldPrintID)
-                        {
-                            Point3D com = this.userGenerator.GetCoM(user);
-                            com = this.depth.ConvertRealWorldToProjective(com);
-
-                            string label = "";
-                            if (!this.shouldPrintState)
-                                label += user;
-                            else if (this.skeletonCapbility.IsTracking(user))
-                                label += user + " - Tracking";
-                            else if (this.skeletonCapbility.IsCalibrating(user))
-                                label += user + " - Calibrating...";
-                            else
-                                label += user + " - Looking for pose";
-
-                            g.DrawString(label, new Font("Arial", 6), new SolidBrush(anticolors[user % ncolors]), com.X, com.Y);
-
-                        }
-
-                        if (this.shouldDrawSkeleton && this.skeletonCapbility.IsTracking(user))
-//                        if (this.skeletonCapbility.IsTracking(user))
-                            DrawSkeleton(g, anticolors[user % ncolors], user);
-
-                    }
+//                    uint[] users = this.userGenerator.GetUsers();
+//                    foreach (uint user in users)
+//                    {
+//                        if (this.shouldPrintID)
+//                        {
+//                            Point3D com = this.userGenerator.GetCoM(user);
+//                            com = this.depth.ConvertRealWorldToProjective(com);
+//
+//                            string label = "";
+//                            if (!this.shouldPrintState)
+//                                label += user;
+//                            else if (this.skeletonCapbility.IsTracking(user))
+//                                label += user + " - Tracking";
+//                            else if (this.skeletonCapbility.IsCalibrating(user))
+//                                label += user + " - Calibrating...";
+//                            else
+//                                label += user + " - Looking for pose";
+//
+//                            g.DrawString(label, new Font("Arial", 6), new SolidBrush(anticolors[user % ncolors]), com.X, com.Y);
+//
+//                        }
+//
+//                        if (this.shouldDrawSkeleton && this.skeletonCapbility.IsTracking(user))
+////                        if (this.skeletonCapbility.IsTracking(user))
+//                            DrawSkeleton(g, anticolors[user % ncolors], user);
+//
+//                    }
                     g.Dispose();
 				}
 
 				this.Invalidate();
 			}
 		}
-
-		private readonly string SAMPLE_XML_FILE = @"../../Sample/SamplesConfig.xml";
-
-		private Context context;
-		private DepthGenerator depth;
-        private UserGenerator userGenerator;
-        private SkeletonCapability skeletonCapbility;
-        private PoseDetectionCapability poseDetectionCapability;
-        private string calibPose;
-		private Thread readerThread;
-		private bool shouldRun;
-		private Bitmap bitmap;
-		private int[] histogram;
-
-        private Dictionary<uint, Dictionary<SkeletonJoint, SkeletonJointPosition>> joints;
-
-        private bool shouldDrawPixels = true;
-        private bool shouldDrawBackground = true;
-        private bool shouldPrintID = true;
-        private bool shouldPrintState = true;
-        private bool shouldDrawSkeleton = true;
+		
 	}
 }
