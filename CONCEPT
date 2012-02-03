@@ -1,0 +1,42 @@
+
+Plot:
+
+	The Player remotely controlls a love machine using mainly the motions of his hips as they are perceived by the kinect sensor.
+
+Player:
+
+	Moves:
+		The basic hip forwad/backward motion of the player is monitored to extract the two main factors of the gameplay: speed and depth
+		Additionally the distance between hip and hands could be used, so the player could vary his motions using only his hips, only his hands, or both for the maximum effect.
+		Gestures could be used to let the player respond to randomly uprising desires of the LoveObject in order to get some kind of bonus. e.g. the LoveObject states "slap me" and the player is given a timeframe in which he can respond with the appropriate slap motion. if he succeeds he might get a short multiplier boost, money, extra endurance, ... whatever as a reward, or he might get nothing if he succeeds but is punished if he fails (e.g. lose endurance, LoveObject loses satisfaction, ...).
+
+	Money:
+		Successful satisfaction of a LoveObject is rewarded with money. The amount of money could be varied depending on the players performance throughout the act. (e.g. time, energy/endurance left upon completion,...)
+		Money can be used to buy upgrades for the LoveMachine, enabling the player to satisfy more demanding LoveObjects. Ultimately bigger/stronger/different machines can be bought.
+
+
+LoveObjects:
+
+	LoveObjects are on the receiving end of the LoveMachine, and are to be satisfied. A LoveObject has a set of preferences and factors that define how it responds to player input. Essentially the player input is mixed down to an addition or substraction from the current satisfaction level of the LoveObject. Once the satisfaction reaches 100% the climax is reached and the player achieved the goal.
+	The receivers of the Players motions are given a Name. This name is used as a seed for the pseudo random number generator. This way the Player can estimate the LoveObjects preferences if he recognizes the name from a previous game.
+	In order to maintain the Players motivation, the LoveObjecs visual representation is based on its difficulty, meaning that LoveObjects that are considered to be "hot" in a mainstream classification are more difficult to satisfy. This way the player has to work his way through encounters with less appealing LoveObjects in order to upgrade his LoveMachine to be able to satisfy the attractive LoveObjects.
+	Depending on the LoveObjects preferences it might randomly request the Player to perform a specific action.
+	It can also vary its current speed and depth preference, preferably via an audio request to the player.
+
+LoveMachines:
+
+	The LoveMachines are the Players tools to satisfy the LoveObjects. A LoveMachine requires electrical energy which is transformed to kinetic energy in order to perform the satisfying moves.
+
+	Energy:
+		LoveMachines have rechargeable batteries which are slowly chared during inatctivity.
+		However during movement the LoveMachines require more power than available via the AC power line and therefore drain power from the battery proportional to the intenisty / speed of the movement.
+
+	Properties:
+		LoveMachines have basic factors that enhance the players input data of speed and depth. This game mechanic prevents a player to satisfy a difficult LoveObject with a basic machine, no matter how hard he tries. On the contrary he can easily satisfy a medium difficulty LoveObject without much movement if he has a very advanced LoveMachine.
+
+	Types:
+		There could be different types of machines, like vaginal, anal and dp machines. Depending on the preferences of the LoveObject a certain type of machine will perform better or even be required to produce satisfaction. The player will have to overcome hurdles in order to get access to the more advanced machines. This could be simply gathering a large amount of money, or satisfying a specifically difficult LoveObject.
+
+	Modifications and Upgrades:
+		The player can use the acquired money to buy upgrades and modifications to the LoveMachines. Such upgrades could be an extra battery pack, or a turbo booster that can be activated once per session. A modification could be extra large/small, hard/soft, thick/thin, etc. tip for the LoveMachine.
+		Whereas Upgrades are always useful for satisfying the LoveObject better, the modifications perform better or worse depending on the LoveObjects preferences.
