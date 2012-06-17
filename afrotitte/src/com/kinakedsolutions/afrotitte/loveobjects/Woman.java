@@ -8,7 +8,7 @@ public class Woman extends BasicLoveObject {
 	
 	// Woman specific properties
 	private final int age;
-	private final float height;
+	private final int height;
 	private final float weight;
 	// etc. whatever :p
 	
@@ -39,7 +39,7 @@ public class Woman extends BasicLoveObject {
 		private String name;
 		// optional
 		private int age = 18;
-		private float height = 1.7f;
+		private int height = 170;
 		private float weight = 60;
 		
 		/**
@@ -58,7 +58,7 @@ public class Woman extends BasicLoveObject {
 			this.age = age; return this;
 		}
 
-		public WomanBuilder setHeight(float height) {
+		public WomanBuilder setHeight(int height) {
 			this.height = height; return this;
 		}
 
@@ -80,7 +80,7 @@ public class Woman extends BasicLoveObject {
 		StringBuilder builder = new StringBuilder();
 		builder.append(name).append(":[age=").append(age)
 			.append(", height=").append(height)
-			.append("m, weight=").append(weight)
+			.append("cm, weight=").append(weight)
 			.append("kg]");
 		return builder.toString();
 	}
